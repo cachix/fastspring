@@ -1,0 +1,68 @@
+cabal-version:  2.2
+name:           fastspring
+version:        0.1.0.0
+synopsis:       Fastspring API + webhooks
+homepage:       https://github.com/hercules-ci/fastspring#readme
+bug-reports:    https://github.com/hercules-ci/fastspring/issues
+author:         Hercules Labs
+maintainer:     Domen Kožar
+copyright:      2019 Hercules Labs OÜ
+license:        Apache-2.0
+license-file:   LICENSE
+build-type:     Simple
+extra-source-files:
+    ChangeLog.md
+    README.md
+
+source-repository head
+  type: git
+  location: https://github.com/hercules-ci/fastspring
+
+common defaults
+  default-extensions: OverloadedStrings LambdaCase DeriveGeneric DeriveFunctor DeriveAnyClass
+  ghc-options: -Wall -fwarn-tabs -fwarn-unused-imports -fwarn-missing-signatures -fwarn-name-shadowing -fwarn-incomplete-patterns
+  default-language: Haskell2010
+  build-depends:
+      aeson
+    , base >=4.7 && <5
+    , cryptonite
+    , bytestring
+    , http-client
+    , http-client-tls
+    , memory
+    , servant >=0.14.1
+    , scientific
+    , string-conv
+    , text
+    , time
+
+library
+  import: defaults
+  exposed-modules:
+      FastSpring
+      FastSpring.API
+      FastSpring.Event
+      FastSpring.Settings
+      FastSpring.Signature
+      FastSpring.UnixTime
+  hs-source-dirs:
+      src
+
+test-suite fatspring-test
+  import: defaults
+  type: exitcode-stdio-1.0
+  main-is: Main.hs
+  other-modules:
+      Spec
+  hs-source-dirs:
+      test
+  build-depends:
+      hspec
+    , fastspring
+  build-tool-depends: hspec-discover:hspec-discover
+
+--test-suite readme
+  -- import: defaults
+  -- type: exitcode-stdio-1.0
+  -- main-is: README.lhs
+  -- build-tool-depends: markdown-unlit:markdown-unlit

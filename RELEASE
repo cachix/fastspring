@@ -1,0 +1,7 @@
+- git checkout -B v0.X.X
+- bump version in fastspring.cabal
+- update changelog
+- stack sdist .
+- git tag v0.X.X
+- git push --tags origin HEAD
+- stack upload .
