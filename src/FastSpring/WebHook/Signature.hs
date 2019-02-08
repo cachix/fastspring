@@ -9,18 +9,26 @@ module FastSpring.WebHook.Signature
 import Data.ByteArray (constEq)
 import qualified Data.ByteArray.Encoding as Encoding
 import Data.String.Conv               ( toSL )
+import Data.Aeson      (ToJSON(..))
+import Data.Text (Text)
 import Data.ByteString (ByteString)
+import GHC.Generics (Generic)
 import Crypto.MAC.HMAC (hmac, HMAC)
 import Crypto.Hash.Algorithms (SHA256)
 import Servant.API
 
 
 newtype SignatureSecret = SignatureSecret
-  { unwrapSecret :: ByteString}
+  { unwrapSecret :: ByteString
+  } 
 
 newtype Signature = Signature
-  { unwrap :: ByteString }
-  deriving (Show)
+  { unwrap :: ByteString
+  } deriving (Show, Generic)
+
+-- useful for logging
+instance ToJSON Signature where
+  toJSON (Signature bs) = toJSON (toSL bs :: Text)
 
 instance Eq Signature where
   l == r = unwrap l `constEq ` unwrap r
