@@ -1,7 +1,8 @@
 {- https://docs.fastspring.com/integrating-with-fastspring/webhooks#Webhooks-securityMessageSecret/Security
 -}
-module FastSpring.Signature
+module FastSpring.WebHook.Signature
   ( Signature
+  , SignatureSecret(..)
   , create
   ) where
 
@@ -13,7 +14,9 @@ import Crypto.MAC.HMAC (hmac, HMAC)
 import Crypto.Hash.Algorithms (SHA256)
 import Servant.API
 
-import FastSpring.Settings (Settings(..))
+
+newtype SignatureSecret = SignatureSecret
+  { unwrapSecret :: ByteString}
 
 newtype Signature = Signature
   { unwrap :: ByteString }
@@ -27,8 +30,8 @@ instance FromHttpApiData Signature where
 
 -- | secret: set in fastspring dashboard
 -- | body: whole HTTP response body
-create :: Settings -> ByteString -> Signature
-create Settings { signatureSecret=secret } body = Signature $
+create :: SignatureSecret -> ByteString -> Signature
+create SignatureSecret { unwrapSecret=secret } body = Signature $
   Encoding.convertToBase Encoding.Base64 digest
   where
     digest :: HMAC SHA256
