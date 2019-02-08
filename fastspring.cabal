@@ -31,6 +31,8 @@ common defaults
     , http-client-tls
     , memory
     , servant >=0.14.1
+    , servant-client
+    , servant-client-core
     , scientific
     , string-conv
     , text
@@ -40,11 +42,15 @@ library
   import: defaults
   exposed-modules:
       FastSpring
-      FastSpring.API
-      FastSpring.Event
-      FastSpring.Settings
-      FastSpring.Signature
-      FastSpring.UnixTime
+      FastSpring.Client
+      FastSpring.Client.API
+      FastSpring.Data.Order
+      FastSpring.Data.Product
+      FastSpring.RawMimetype
+      FastSpring.WebHook.API
+      FastSpring.WebHook.Event
+      FastSpring.WebHook.Signature
+      FastSpring.UnixTimeMili
   hs-source-dirs:
       src
 
@@ -54,6 +60,7 @@ test-suite fatspring-test
   main-is: Main.hs
   other-modules:
       Spec
+      FastSpring.UnixTimeMiliSpec
   hs-source-dirs:
       test
   build-depends:
@@ -61,8 +68,10 @@ test-suite fatspring-test
     , fastspring
   build-tool-depends: hspec-discover:hspec-discover
 
---test-suite readme
-  -- import: defaults
-  -- type: exitcode-stdio-1.0
-  -- main-is: README.lhs
-  -- build-tool-depends: markdown-unlit:markdown-unlit
+test-suite readme
+  import: defaults
+  type: exitcode-stdio-1.0
+  ghc-options:         -pgmL markdown-unlit
+  main-is: README.lhs
+  build-depends: fastspring, servant-server, exceptions
+  build-tool-depends: markdown-unlit:markdown-unlit

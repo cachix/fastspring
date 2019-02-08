@@ -10,7 +10,7 @@ import           Data.Proxy                     ( Proxy(..) )
 import           Servant.API
 
 import FastSpring.WebHook.Signature (Signature)
-import FastSpring.ServantMimetype (RawJSON)
+import FastSpring.RawMimetype (RawJSON)
 
 
 type API
