@@ -18,28 +18,29 @@ import Crypto.Hash.Algorithms (SHA256)
 import Servant.API
 
 
-newtype SignatureSecret = SignatureSecret
-  { unwrapSecret :: ByteString
-  } 
+-- } Key supplied to FastSpring for signing webhook payload
+newtype SignatureSecret = SignatureSecret ByteString
 
-newtype Signature = Signature
-  { unwrap :: ByteString
-  } deriving (Show, Generic)
+-- | Base64 encoded HMAC SHA256 signature of request body
+newtype Signature = Signature ByteString
+  deriving (Show, Generic)
 
--- useful for logging
+-- | Useful for logging, serialized as a JSON string
 instance ToJSON Signature where
   toJSON (Signature bs) = toJSON (toSL bs :: Text)
 
+-- | Compare two Signatures are equal in constant time
 instance Eq Signature where
-  l == r = unwrap l `constEq ` unwrap r
+  (Signature l) == (Signature r) = l `constEq ` r
 
 instance FromHttpApiData Signature where
   parseUrlPiece s = Right $ Signature (toSL s)
 
+-- | Create a signature using the secret and a body.
 -- | secret: set in fastspring dashboard
--- | body: whole HTTP response body
+-- | body: whole HTTP body in raw form
 create :: SignatureSecret -> ByteString -> Signature
-create SignatureSecret { unwrapSecret=secret } body = Signature $
+create (SignatureSecret secret) body = Signature $
   Encoding.convertToBase Encoding.Base64 digest
   where
     digest :: HMAC SHA256

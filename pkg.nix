@@ -9,9 +9,8 @@ mkDerivation {
   version = "0.1.0.0";
   src = ./.;
   libraryHaskellDepends = [
-    aeson base bytestring cryptonite http-client http-client-tls memory
-    scientific servant servant-client servant-client-core string-conv
-    text time
+    aeson base bytestring cryptonite http-client memory scientific
+    servant servant-client servant-client-core string-conv text time
   ];
   testHaskellDepends = [
     aeson base bytestring cryptonite exceptions hspec http-client

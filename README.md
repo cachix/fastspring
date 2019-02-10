@@ -14,6 +14,7 @@ import Data.ByteString.Lazy (fromStrict)
 import Control.Monad (unless, forM_)
 import Control.Monad.Catch (throwM)
 import Control.Monad.IO.Class (liftIO)
+import Network.HTTP.Client.TLS ( newTlsManager )
 import Servant
 
 import FastSpring
@@ -39,7 +40,7 @@ webhook body signature = do
   return NoContent
 ```
 
-And hook up your servant server to `webhook` endpoint.
+And hook up your servant server to `webhook` endpoint using `FastSpring.Webhook.API.api`.
 
 ## Getting started with the API
 
@@ -49,7 +50,8 @@ using Servant Client.
 ```haskell
 main :: IO ()
 main = do
-  orderOrErr <- mkClient $ orderGet client (BasicAuthData "user" "password") "order-id"
+  manager <- newTlsManager
+  orderOrErr <- runClient manager $ orderGet client (BasicAuthData "user" "password") "order-id"
   case orderOrErr of
     Right order -> print order
     Left err -> print err

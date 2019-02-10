@@ -14,7 +14,7 @@ import           Data.String.Conv               ( toSL )
 import           Data.Text                      ( Text )
 import           GHC.Generics                   (Generic)
 
-import FastSpring.UnixTimeMili (UnixTimeMili)
+import FastSpring.UnixTimeMilliSeconds (UnixTimeMilliSeconds)
 
 
 newtype Events = Events
@@ -29,7 +29,7 @@ data Event = Event
   -- ^ Whether this event is for live data instead of test data.
   , _processed :: Bool
   -- ^ Whether this event has been marked processed. For a new event this will always be false.
-  , _created :: UnixTimeMili
+  , _created :: UnixTimeMilliSeconds
   -- ^ Timestamp for when the event was created.
   , _type :: Text
   , _data :: Value
@@ -60,6 +60,7 @@ data EventParsingError
   = UnknownEvent Text
   | FailedToParse Text
 
+-- | TODO: implement parsing
 parse :: Event -> Either EventParsingError EventData
 parse event =
   case _type event of

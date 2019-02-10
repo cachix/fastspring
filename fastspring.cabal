@@ -28,7 +28,6 @@ common defaults
     , cryptonite
     , bytestring
     , http-client
-    , http-client-tls
     , memory
     , servant >=0.14.1
     , servant-client
@@ -50,7 +49,7 @@ library
       FastSpring.WebHook.API
       FastSpring.WebHook.Event
       FastSpring.WebHook.Signature
-      FastSpring.UnixTimeMili
+      FastSpring.UnixTimeMilliSeconds
   hs-source-dirs:
       src
 
@@ -60,7 +59,7 @@ test-suite fatspring-test
   main-is: Main.hs
   other-modules:
       Spec
-      FastSpring.UnixTimeMiliSpec
+      FastSpring.UnixTimeMilliSecondsSpec
   hs-source-dirs:
       test
   build-depends:
@@ -73,5 +72,5 @@ test-suite readme
   type: exitcode-stdio-1.0
   ghc-options:         -pgmL markdown-unlit
   main-is: README.lhs
-  build-depends: fastspring, servant-server, exceptions
+  build-depends: fastspring, servant-server, exceptions, http-client-tls
   build-tool-depends: markdown-unlit:markdown-unlit
