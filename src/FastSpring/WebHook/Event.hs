@@ -1,5 +1,6 @@
-module FastSpring.Event
-  ( Event(..)
+module FastSpring.WebHook.Event
+  ( Events(..)
+  , Event(..)
   , EventParsingError(..)
   , EventData(..)
   , parse
@@ -13,7 +14,12 @@ import           Data.String.Conv               ( toSL )
 import           Data.Text                      ( Text )
 import           GHC.Generics                   (Generic)
 
-import FastSpring.UnixTime (UnixTime)
+import FastSpring.UnixTimeMilliSeconds (UnixTimeMilliSeconds)
+
+
+newtype Events = Events
+  { events :: [Event]
+  } deriving (Generic, Show, FromJSON)
 
 
 data Event = Event
@@ -23,7 +29,7 @@ data Event = Event
   -- ^ Whether this event is for live data instead of test data.
   , _processed :: Bool
   -- ^ Whether this event has been marked processed. For a new event this will always be false.
-  , _created :: UnixTime
+  , _created :: UnixTimeMilliSeconds
   -- ^ Timestamp for when the event was created.
   , _type :: Text
   , _data :: Value
@@ -54,11 +60,12 @@ data EventParsingError
   = UnknownEvent Text
   | FailedToParse Text
 
+-- | TODO: implement parsing
 parse :: Event -> Either EventParsingError EventData
 parse event =
   case _type event of
-      "subscription.deactivated" -> SubscriptionDeactivated <$> parseData
-      "subscription.activated" -> SubscriptionActivated <$> parseData
+      --"subscription.deactivated" -> SubscriptionDeactivated <$> parseData
+      --"subscription.activated" -> SubscriptionActivated <$> parseData
       unknown -> Left $ UnknownEvent $ "type " <> toSL unknown <> " no supported yet"
   where
     parseData :: FromJSON a => Either EventParsingError a
