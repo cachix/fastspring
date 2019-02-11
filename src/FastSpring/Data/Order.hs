@@ -2,7 +2,7 @@ module FastSpring.Data.Order
   ( Order(..)
   ) where
 
-import           Data.Aeson (FromJSON)
+import           Data.Aeson (FromJSON, ToJSON)
 import           Data.Text (Text)
 import           GHC.Generics                   (Generic)
 
@@ -13,4 +13,4 @@ data Order = Order
   , live :: Bool
   , result :: Text
   , items :: [Product]
-  } deriving (Generic, Show, FromJSON)
+  } deriving (Generic, Show, FromJSON, ToJSON)
