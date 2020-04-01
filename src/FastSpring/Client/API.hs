@@ -31,8 +31,7 @@ data FastSpringAPI route = FastSpringAPI
         -- TODO: a list of accounts
         Capture "accounts" Text :>
         "authenticate" :>
-        -- TODO: error handling
-        Get '[JSON] [AccountURL]
+        Get '[JSON] AccountURL
   } deriving (Generic)
 
 fastSpringAPI :: Proxy (ToServantApi FastSpringAPI)
