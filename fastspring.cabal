@@ -43,6 +43,7 @@ library
       FastSpring
       FastSpring.Client
       FastSpring.Client.API
+      FastSpring.Data.AccountURL
       FastSpring.Data.Order
       FastSpring.Data.Product
       FastSpring.RawMimetype

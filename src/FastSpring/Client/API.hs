@@ -11,18 +11,28 @@ import           Servant.API
 import           Servant.API.Generic
 
 import           FastSpring.Data.Order (Order)
-
+import           FastSpring.Data.AccountURL (AccountURL)
 
 -- TODO: https://github.com/haskell-servant/servant-auth/issues/140
 --type FastSpringAuth = Auth '[BasicAuth] ()
 type FastSpringAuth = BasicAuth "FastSpring" ()
 
 data FastSpringAPI route = FastSpringAPI
-  { orderGet :: route :-
-                FastSpringAuth :>
-                "orders" :>
-                Capture "order-id" Text :>
-                Get '[JSON] Order
+  { orderGet 
+      :: route :-
+          FastSpringAuth :>
+          "orders" :>
+          Capture "order-id" Text :>
+          Get '[JSON] Order
+  , accountManagementURL 
+      :: route :-
+        FastSpringAuth :>
+        "accounts" :>
+        -- TODO: a list of accounts
+        Capture "accounts" Text :>
+        "authenticate" :>
+        -- TODO: error handling
+        Get '[JSON] [AccountURL]
   } deriving (Generic)
 
 fastSpringAPI :: Proxy (ToServantApi FastSpringAPI)
